@@ -1,10 +1,15 @@
-# Author: Noah Yoshida 
-# With help from Data Science Dojo's YouTube video on webscraping in Python with BeautifulSoup
-# With help from dcolish on stackoverflow.com
-# This prorgram will return a list of parsed WSJ market stories from its homepage 
-# This program takes advantage of WSJ's RSS xml file feed
+#!/usr/bin/env python
 
-# TODO: This program works! It grabs the titles, descriptions, and the dates as strings and outputs a list! 
+__author__          = 'Noah Yoshida' 
+__email__           = 'nyoshida@nd.edu'
+
+'''
+With help from https://www.youtube.com/watch?v=XQgXKtPSzUI
+This prorgram will return a list of parsed WSJ market stories from its homepage, taking advantage of WSJ's RSS xml file feed.
+
+It grabs the titles, descriptions, and the dates of the news items as strings and outputs them as a list. 
+'''
+
 def wsj_parser():
     from urllib.request import urlopen as uReq
     from bs4 import BeautifulSoup as soup 
@@ -19,8 +24,6 @@ def wsj_parser():
     # my_url = 'https://www.wsj.com/xml/rss/3_7014.xml'
     # World News 
     my_url = 'https://www.wsj.com/xml/rss/3_7085.xml'
-
-
 
     # Opens the connection and grabs the page 
     uClient = uReq(my_url)
@@ -39,6 +42,7 @@ def wsj_parser():
 
     return [titles,descrpitions,dates]
 
+# ========= Testing ==========
 x = wsj_parser()
 
 for i in range(len(x[0])):

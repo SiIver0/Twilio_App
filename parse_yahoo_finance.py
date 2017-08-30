@@ -1,20 +1,54 @@
-# Author: Noah Yoshida 
-# With help from Data Science Dojo's YouTube video on webscraping in Python with BeautifulSoup
-# This prorgram will return a list of parsed Yahoo Finance stories from its homepage 
+#!/usr/bin/env python
+
+__author__          = 'Noah Yoshida' 
+__email__           = 'nyoshida@nd.edu'
+
+'''
+With help from https://www.youtube.com/watch?v=XQgXKtPSzUI
+This prorgram will return a list of parsed Yahoo Finance stories from its homepage.
+'''
+# Doesn't really work.. the yahoo rss page has weird formatting 
 
 def yahoo_parser():
+    import feedparser
     from urllib.request import urlopen as uReq
     from bs4 import BeautifulSoup as soup 
-    my_url = 'https://finance.yahoo.com'
+    from datetime import datetime
+    import re
 
-    # OPens the connection and grabs the page 
+    # Popular Stories
+    # my_url = 'https://finance.yahoo.com/rss/popularstories'
+    my_url = 'https://rss.cnn.com/rss/money_technology.rss'
+    f = feedparser.parse(my_url)
+    print(str(f.feed.title))
+
+
+    # Opens the connection and grabs the page 
     uClient = uReq(my_url)
     page_html = uClient.read()
     uClient.close()
-    page_soup = soup(page_html, 'html.parser')
-    print(page_soup.body.span)
-# Need a way to load the page further than what is normall loaded (JS 
-# loads more when you scroll - you need to load this too :3 )
+    page_soup = soup(page_html, 'xml')
+
+    titles = []
+    descrpitions = []
+    dates = []
+
+    for item in page_soup.findAll('item'):
+        titles.append(item.title.text)
+        d = item.description.text
+        cleanr = re.compile('<.*?>')
+        cleantext = re.sub(cleanr,'',d)
+        print(cleantext)
+        descrpitions.append(cleantext)
+        dates.append(str(item.pubDate.text))
+
+    return [titles,descrpitions,dates]
 
 
-yahoo_parser()
+x = yahoo_parser()
+
+# for i in range(len(x[0])):
+#     print('-------------')
+#     print(x[0][i])
+#     print(x[1][i])
+#     print(x[2][i])
