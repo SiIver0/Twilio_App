@@ -1,6 +1,3 @@
-+++
-Twilio App
-+++
 
 SMS Alert
 ---
